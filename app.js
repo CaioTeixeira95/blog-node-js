@@ -2,19 +2,26 @@
 const express = require("express");
 const app = express();
 const admin = require("./routes/admin"); // Pegando a rota admin (é assim que se usa rotas em arquivo externo)
+const usuario = require("./routes/usuario");
 
 const handlebars = require("express-handlebars"); // Template Engine
 const bodyParser = require("body-parser"); // Pega informações do formulário
 const mongoose = require("mongoose"); // Gerencia a conexão com o banco de dados
 const path = require("path"); // Define pastas que serão usadas (como por exemplo CSS externo)
 
+// Variáveis de sessão
 const session = require("express-session");
 const flash = require("connect-flash");
 
+// Importando os Models
 require("./models/Postagem");
 require("./models/Categoria");
+require("./models/Usuario");
+
+// Variáveis dos Models
 const Postagem = mongoose.model("postagens");
 const Categoria = mongoose.model("categorias");
+const Usuario = mongoose.model("usuarios");
 
 // Configurações
 // Sessão
@@ -142,6 +149,7 @@ app.get("/404", (req, res) => {
 });
 
 app.use("/admin", admin);
+app.use("/usuarios", usuario);
 
 const port = 8081;
 app.listen(port, () => {
