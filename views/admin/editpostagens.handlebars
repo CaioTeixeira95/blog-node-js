@@ -4,14 +4,6 @@
 
 {{/each}}
 
-{{#each categorias}}
-  {{#comp nome postagem.categoria.nome}}
-    OI NENE
-  {{else}}
-    Não é igual
-  {{/comp}}
-{{/each}}
-{{categorias._id}}
 <h4>Editar Postagem: </h4>
 <div class="card">
   <div class="card-body">
@@ -28,11 +20,7 @@
       <label for="categoria">Categoria:</label><br>
       <select class="custom-select" name="categoria" id="categoria">
         {{#each categorias}}
-          {{#if postagem.categoria._id}}
-            <option value="{{postagem.categoria._id}}" selected>{{postagem.categoria.nome}}</option>
-          {{else}}
-            <option value="{{_id}}">{{nome}}</option>
-          {{/if}}
+          <option value="{{postagem.categoria._id}}" selected>{{postagem.categoria.nome}}</option>
         {{else}}
           <option value="0">-- Selecione --</option>
         {{/each}}
