@@ -20,7 +20,7 @@
       <label for="categoria">Categoria:</label><br>
       <select class="custom-select" name="categoria" id="categoria">
         {{#each categorias}}
-          <option value="{{postagem.categoria._id}}" selected>{{postagem.categoria.nome}}</option>
+          <option value="{{_id}}">{{nome}}</option>
         {{else}}
           <option value="0">-- Selecione --</option>
         {{/each}}

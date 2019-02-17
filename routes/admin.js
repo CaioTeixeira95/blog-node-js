@@ -289,28 +289,68 @@ router.post("/postagens/edit", (req, res) => {
 
   if (req.body.categoria == 0) {
     erros.push({
-      texto: "Nenhuma categoria cadastrada. <a class='text-decoration-none' href='/admin/addcategorias'>Clique aqui</a> para cadastrar."
+      texto: "Nenhuma categoria cadastrada."
     });
   }
 
   if(erros.length > 0){
 
-    Categoria.find().then((categorias) => {
-      res.render("admin/addpostagem", {
-        categorias: categorias,
-        erros: erros
+    Postagem.findOne({
+      _id: req.body.id
+    }).then((postagem) => {
+      Categoria.find().then((categorias) => {
+        res.render("admin/editpostagens", {
+          categorias: categorias,
+          postagem: postagem,
+          erros: erros
+        });
+      }).catch(() => {
+        req.flash("error_msg", "Houve erro ao carregar categorias.");
+        res.redirect("/admin");
       });
     }).catch(() => {
-      req.flash("error_msg", "Houve erro ao carregar formulário.");
-      res.redirect("/admin");
+      req.flash("erros_msg", "Houve um erro ao carregar a postagem");
     });
 
   } else {
 
+    Postagem.findOne({
+      _id: req.body.id
+    }).then((postagem) => {
 
+      postagem.titulo = req.body.titulo;
+      postagem.slug = req.body.slug;
+      postagem.descricao = req.body.descricao;
+      postagem.conteudo = req.body.conteudo;
+      postagem.categoria = req.body.categoria;
+
+      postagem.save().then(() => {
+        req.flash("success_msg", "Postagem alterada com sucesso.");
+        res.redirect("/admin/postagens");
+      }).catch((error) => {
+        req.flash("error_msg", `Erro interno. Erro: ${erro}`);
+        res.redirect("admin/postagens");
+      });
+
+    }).catch(() => {
+      req.flash("error_msg", "Houve um erro ao editar a postagem.");
+      res.redirect("admin/postagens");
+    });
 
   }
 
 });
+
+router.post("/postagens/deletar", (req, res) => {
+  Postagem.remove({
+    _id: req.body.id
+  }).then(() => {
+    req.flash("success_msg", "Postagem deletada com sucesso.");
+  }).catch(() => {
+    req.flash("error_msg", "Houve um erro ao deletar a postagem.");
+  });
+
+  res.redirect("/admin/postagens");
+})
 
 module.exports = router;
