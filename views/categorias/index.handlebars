@@ -1,0 +1,14 @@
+<h1>Categorias: </h1>
+
+{{#each categorias}}
+  <div class="card mt-4">
+    <div class="card-body">
+      <h4>{{nome}}</h4>
+      <hr>
+      <button class="btn btn-primary" type="button" name="button" onclick="window.location = '/categorias/{{slug}}'">Ver postagens</button>
+    </div>
+  </div>
+{{else}}
+  <p>Nenhuma categoria cadastrada.</p>
+{{/each}}
+<br>

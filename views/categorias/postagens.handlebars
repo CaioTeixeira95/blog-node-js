@@ -1,0 +1,14 @@
+{{#each postagens}}
+  <div class="card mt-4">
+    <div class="card-body">
+      <h3><strong>{{titulo}}</strong></h3>
+      <hr>
+      <p><strong>Descrição:</strong> {{descricao}}</p>
+      <button class="btn btn-primary" type="button" name="button" onclick="window.location = '/postagem/{{slug}}'">Leia mais</button><br><br>
+      <small><strong>Data de publicação:</strong> {{categoria.date}}</small>
+    </div>
+  </div>
+{{else}}
+  <p>Nenhuma postagem feita.</p>
+{{/each}}
+<br>
