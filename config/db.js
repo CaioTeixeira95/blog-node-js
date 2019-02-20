@@ -1,6 +1,6 @@
 if(process.env.NODE_ENV == "production") {
   module.exports = {
-    mongoURI: "mongodb+srv://caio_teixeira:caio1995@blog-node-js-hjyii.mongodb.net/test?retryWrites=true"
+    mongoURI: "mongodb+srv://<dbuser>:<password>@blog-node-js-hjyii.mongodb.net/test?retryWrites=true"
   }
 } else {
   module.exports = {
