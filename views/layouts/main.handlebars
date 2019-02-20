@@ -13,6 +13,11 @@
 <body>
   {{>_navbar}} <!-- O sinal de maior (>) serve para indicar que o arquivo está na pasta 'partials' -->
   <div class="container mt-4">
+    {{#if error}}
+      <div class="alert alert-danger">{{error}}</div>
+    {{else}}
+
+    {{/if}}
     {{>_msg}}
     {{{body}}}
   </div>

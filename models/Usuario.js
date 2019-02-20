@@ -13,6 +13,10 @@ const Usuario = new Schema({
   senha: {
     type: String,
     required: true
+  },
+  admin: {
+    type: Number,
+    default: 0
   }
 });
 

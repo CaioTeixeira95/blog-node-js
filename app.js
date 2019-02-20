@@ -8,6 +8,9 @@ const handlebars = require("express-handlebars"); // Template Engine
 const bodyParser = require("body-parser"); // Pega informações do formulário
 const mongoose = require("mongoose"); // Gerencia a conexão com o banco de dados
 const path = require("path"); // Define pastas que serão usadas (como por exemplo CSS externo)
+const passport = require("passport");
+require("./config/auth")(passport);
+const db = require("./config/db");
 
 // Variáveis de sessão
 const session = require("express-session");
@@ -30,12 +33,16 @@ app.use(session({
   resave: true,
   saveUnitialized: true
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 
 // Middleware
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash("success_msg");
   res.locals.error_msg = req.flash("error_msg");
+  res.locals.error = req.flash("error"); // Mensagem de erro do Passport
+  res.locals.user = req.user || null; // Usuario logado no sistema
   next();
 });
 
@@ -57,9 +64,9 @@ app.engine("handlebars", handlebars({
 }));
 app.set("view engine", "handlebars");
 
-// Mongoose
+// Mongoose (Configurando a conexão com o banco de dados)
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/blogapp").then(() => {
+mongoose.connect(db.mongoURI).then(() => {
   console.log("Conexão feita com sucesso.");
 }).catch((err) => {
   console.log("Erro ao se conectar. Erro: " + err);
@@ -114,13 +121,11 @@ app.get("/categorias/:slug", (req, res) => {
   Categoria.findOne({
     slug: req.params.slug
   }).then((categoria) => {
-    console.log(categoria);
     if (categoria) {
 
       Postagem.find({
         categoria: categoria._id
       }).then((postagens) => {
-        console.log(postagens);
         res.render("categorias/postagens", {
           postagens: postagens,
           categoria: categoria
@@ -151,7 +156,7 @@ app.get("/404", (req, res) => {
 app.use("/admin", admin);
 app.use("/usuarios", usuario);
 
-const port = 8081;
-app.listen(port, () => {
-  console.log(`Servidor rodando em: http://localhost:${port}`);
+const PORT = process.env.PORT || 8081;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando.`);
 });
